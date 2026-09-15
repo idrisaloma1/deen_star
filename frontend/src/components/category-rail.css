@@ -1,0 +1,32 @@
+.category-rail {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px 0 6px;
+  margin-bottom: 28px;
+  border-bottom: 2px solid var(--line);
+}
+
+.category-pill {
+  flex-shrink: 0;
+  border: 2px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.category-pill:hover {
+  border-color: var(--teal);
+  color: var(--teal-dark);
+}
+
+.category-pill.is-active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}

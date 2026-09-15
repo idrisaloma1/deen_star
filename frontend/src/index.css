@@ -1,0 +1,205 @@
+:root {
+  --ink: #17211d;
+  --paper: #f5efe1;
+  --teal: #0f5c51;
+  --teal-dark: #0b433b;
+  --amber: #e0932c;
+  --amber-dark: #b8721a;
+  --clay: #b14a2b;
+  --line: #d8cbae;
+  --paper-raised: #fbf7ec;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-ui: 'Space Grotesk', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 0;
+  color: var(--ink);
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: var(--font-ui);
+  cursor: pointer;
+}
+
+input, select, textarea {
+  font-family: var(--font-ui);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* -------- Buttons -------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border: 2px solid var(--ink);
+  background: transparent;
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: 3px;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:focus-visible {
+  outline: 3px solid var(--amber);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--paper);
+}
+
+.btn-primary:hover {
+  background: var(--teal-dark);
+  border-color: var(--teal-dark);
+}
+
+.btn-amber {
+  background: var(--amber);
+  border-color: var(--amber);
+  color: var(--ink);
+}
+
+.btn-amber:hover {
+  background: var(--amber-dark);
+  border-color: var(--amber-dark);
+}
+
+.btn-danger {
+  border-color: var(--clay);
+  color: var(--clay);
+}
+
+.btn-danger:hover {
+  background: var(--clay);
+  color: var(--paper);
+}
+
+.btn-sm {
+  padding: 7px 14px;
+  font-size: 13px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* -------- Form fields -------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--teal-dark);
+}
+
+.field input,
+.field textarea,
+.field select {
+  padding: 11px 12px;
+  border: 2px solid var(--line);
+  background: var(--paper-raised);
+  border-radius: 3px;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--teal);
+}
+
+.error-banner {
+  background: #f6e3da;
+  border: 2px solid var(--clay);
+  color: var(--clay);
+  padding: 10px 14px;
+  border-radius: 3px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.success-banner {
+  background: #e4efe0;
+  border: 2px solid var(--teal);
+  color: var(--teal-dark);
+  padding: 10px 14px;
+  border-radius: 3px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+/* -------- Shell -------- */
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-shell main {
+  flex: 1;
+}
+
+.site-footer {
+  background: var(--ink);
+  color: #a79f8b;
+  padding: 24px 0;
+  font-size: 13px;
+  margin-top: auto;
+}

@@ -1,0 +1,73 @@
+.admin-page {
+  padding: 40px 24px 72px;
+}
+
+.admin-page h1 {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 32px;
+  margin-top: 24px;
+  align-items: start;
+}
+
+.admin-form {
+  background: var(--paper-raised);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 24px;
+}
+
+.admin-form h2 {
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.admin-list h2 {
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--paper-raised);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.admin-table th {
+  background: var(--teal);
+  color: var(--paper);
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 860px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}
