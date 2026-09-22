@@ -1,10 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext.jsx';
+import { useCart } from '../context/CartContext.jsx';
+import { useWishlist } from '../context/WishlistContext.jsx';
 import './navbar.css';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { count } = useCart();
+  const { count: wishlistCount } = useWishlist();
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
 
@@ -33,12 +37,32 @@ export default function Navbar() {
         </form>
 
         <nav className="navbar-links">
+          {user && (
+            <Link to="/wishlist" className="navbar-cart">
+              Wishlist
+              {wishlistCount > 0 && <span className="navbar-cart-badge">{wishlistCount}</span>}
+            </Link>
+          )}
+          {user && (
+            <Link to="/cart" className="navbar-cart">
+              Cart
+              {count > 0 && <span className="navbar-cart-badge">{count}</span>}
+            </Link>
+          )}
           {user ? (
             <>
+              <Link to="/orders" className="navbar-link">
+                Orders
+              </Link>
               {user.role === 'admin' && (
-                <Link to="/admin" className="navbar-link">
-                  Admin
-                </Link>
+                <>
+                  <Link to="/admin" className="navbar-link">
+                    Admin
+                  </Link>
+                  <Link to="/admin/orders" className="navbar-link">
+                    Manage orders
+                  </Link>
+                </>
               )}
               <span className="navbar-user">Hi, {user.full_name.split(' ')[0]}</span>
               <button className="btn btn-sm" onClick={logout}>

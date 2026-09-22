@@ -1,0 +1,43 @@
+.wishlist-btn {
+  border: 2px solid var(--ink);
+  background: var(--paper-raised);
+  color: var(--ink);
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  font-size: 17px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.1s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.wishlist-btn:hover:not(:disabled) {
+  transform: scale(1.08);
+}
+
+.wishlist-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.wishlist-btn.is-saved {
+  background: var(--clay);
+  border-color: var(--clay);
+  color: var(--paper);
+}
+
+/* variant floated over a product card's media */
+.wishlist-btn.card-float {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--paper-raised);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.wishlist-btn.card-float.is-saved {
+  background: var(--clay);
+}

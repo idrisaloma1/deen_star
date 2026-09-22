@@ -1,0 +1,151 @@
+.order-detail-page {
+  padding: 32px 24px 72px;
+}
+
+.order-detail-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 8px 0 24px;
+}
+
+.order-detail-head h1 {
+  font-size: 26px;
+  margin-bottom: 4px;
+}
+
+.order-detail-date {
+  font-size: 13px;
+  color: #8c8471;
+}
+
+.order-detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 24px;
+  align-items: start;
+}
+
+.order-detail-card {
+  background: var(--paper-raised);
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.order-detail-card h2 {
+  font-size: 16px;
+  margin-bottom: 14px;
+}
+
+.order-detail-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #3c372c;
+}
+
+.order-detail-item-qty {
+  color: #8c8471;
+}
+
+.order-detail-total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--teal-dark);
+  border-top: 2px solid var(--line);
+  margin-top: 10px;
+  padding-top: 10px;
+}
+
+.order-detail-line {
+  font-size: 14px;
+  margin: 0 0 6px;
+  color: #3c372c;
+}
+
+.order-detail-notes {
+  color: #8c8471;
+  font-style: italic;
+}
+
+.order-status-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.order-status-form select,
+.order-status-form input {
+  padding: 9px 11px;
+  border: 2px solid var(--line);
+  background: var(--paper);
+  border-radius: 3px;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.order-status-form select:focus,
+.order-status-form input:focus {
+  outline: none;
+  border-color: var(--teal);
+}
+
+/* -------- Timeline -------- */
+.order-timeline {
+  position: sticky;
+  top: 90px;
+}
+
+.timeline-entry {
+  display: flex;
+  gap: 12px;
+  padding-bottom: 18px;
+  position: relative;
+}
+
+.timeline-entry:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 16px;
+  bottom: 0;
+  width: 2px;
+  background: var(--line);
+}
+
+.timeline-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--line);
+  border: 2px solid var(--ink);
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.timeline-entry.is-latest .timeline-dot {
+  background: var(--amber);
+}
+
+.timeline-note {
+  font-size: 13px;
+  color: #5a5344;
+  margin: 4px 0 2px;
+}
+
+.timeline-date {
+  font-size: 12px;
+  color: #8c8471;
+}
+
+@media (max-width: 860px) {
+  .order-detail-layout {
+    grid-template-columns: 1fr;
+  }
+}

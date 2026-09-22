@@ -1,4 +1,8 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useAuth } from '../context/AuthContext.jsx';
+import { useCart } from '../context/CartContext.jsx';
+import WishlistButton from './WishlistButton.jsx';
 import './product-card.css';
 
 function formatNaira(amount) {
@@ -6,7 +10,28 @@ function formatNaira(amount) {
 }
 
 export default function ProductCard({ product }) {
+  const { user } = useAuth();
+  const { addItem } = useCart();
+  const navigate = useNavigate();
+  const [adding, setAdding] = useState(false);
   const outOfStock = product.stock_quantity <= 0;
+
+  async function handleAddToCart(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    setAdding(true);
+    try {
+      await addItem(product, 1);
+    } catch {
+      // toast/context already surfaces failures elsewhere; keep card quiet
+    } finally {
+      setAdding(false);
+    }
+  }
 
   return (
     <Link to={`/product/${product.slug}`} className="stall-card">
@@ -17,6 +42,7 @@ export default function ProductCard({ product }) {
           <span className="stall-card-initial">{product.name.charAt(0)}</span>
         )}
         <span className="stall-card-tag">{formatNaira(product.price)}</span>
+        <WishlistButton product={product} className="card-float" />
       </div>
       <div className="stall-card-body">
         {product.category_name && (
@@ -33,6 +59,13 @@ export default function ProductCard({ product }) {
           )}
           {outOfStock && <span className="stall-card-oos">Out of stock</span>}
         </div>
+        <button
+          className="btn btn-sm btn-amber stall-card-add"
+          onClick={handleAddToCart}
+          disabled={outOfStock || adding}
+        >
+          {outOfStock ? 'Unavailable' : adding ? 'Adding…' : 'Add to cart'}
+        </button>
       </div>
     </Link>
   );

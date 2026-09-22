@@ -53,7 +53,31 @@ export const api = {
   deleteProduct: (id) => request(`/products/${id}`, { method: 'DELETE', auth: true }),
 
   // Categories
-  listCategories: () => request('/categories')
+  listCategories: () => request('/categories'),
+  createCategory: (payload) => request('/categories', { method: 'POST', body: payload, auth: true }),
+  updateCategory: (id, payload) => request(`/categories/${id}`, { method: 'PUT', body: payload, auth: true }),
+  deleteCategory: (id) => request(`/categories/${id}`, { method: 'DELETE', auth: true }),
+
+  // Cart
+  getCart: () => request('/cart', { auth: true }),
+  addToCart: (product_id, quantity = 1) =>
+    request('/cart', { method: 'POST', body: { product_id, quantity }, auth: true }),
+  updateCartItem: (id, quantity) =>
+    request(`/cart/${id}`, { method: 'PUT', body: { quantity }, auth: true }),
+  removeCartItem: (id) => request(`/cart/${id}`, { method: 'DELETE', auth: true }),
+  clearCart: () => request('/cart', { method: 'DELETE', auth: true }),
+
+  // Orders
+  placeOrder: (payload) => request('/orders', { method: 'POST', body: payload, auth: true }),
+  listMyOrders: () => request('/orders', { auth: true }),
+  getOrder: (id) => request(`/orders/${id}`, { auth: true }),
+  listAllOrders: () => request('/orders/admin/all', { auth: true }),
+  updateOrderStatus: (id, payload) => request(`/orders/${id}/status`, { method: 'PUT', body: payload, auth: true }),
+
+  // Wishlist
+  getWishlist: () => request('/wishlist', { auth: true }),
+  addToWishlist: (product_id) => request('/wishlist', { method: 'POST', body: { product_id }, auth: true }),
+  removeWishlistItem: (id) => request(`/wishlist/${id}`, { method: 'DELETE', auth: true })
 };
 
 export { getToken };

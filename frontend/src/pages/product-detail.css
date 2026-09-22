@@ -42,9 +42,16 @@
   opacity: 0.85;
 }
 
+.product-detail-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 8px 0 14px;
+}
+
 .product-detail-info h1 {
   font-size: 32px;
-  margin: 8px 0 14px;
   line-height: 1.15;
 }
 
@@ -74,10 +81,17 @@
   margin-bottom: 18px;
 }
 
-.product-detail-note {
+.product-detail-qty {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.product-detail-qty-label {
   font-size: 13px;
-  color: #8c8471;
-  margin-top: 10px;
+  font-weight: 600;
+  color: var(--teal-dark);
 }
 
 @media (max-width: 720px) {

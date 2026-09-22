@@ -8,6 +8,79 @@ function formatNaira(amount) {
 
 const EMPTY_FORM = { name: '', description: '', price: '', stock_quantity: '', category_id: '' };
 
+function CategoryRow({ category, onRename, onDelete }) {
+  const [editing, setEditing] = useState(false);
+  const [name, setName] = useState(category.name);
+  const [saving, setSaving] = useState(false);
+
+  async function handleSave() {
+    if (!name.trim() || name.trim() === category.name) {
+      setEditing(false);
+      setName(category.name);
+      return;
+    }
+    setSaving(true);
+    try {
+      await onRename(category.id, name.trim());
+      setEditing(false);
+    } catch {
+      setName(category.name);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="category-row">
+      {editing ? (
+        <input
+          className="category-row-input"
+          value={name}
+          autoFocus
+          onChange={(e) => setName(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleSave();
+            if (e.key === 'Escape') {
+              setName(category.name);
+              setEditing(false);
+            }
+          }}
+        />
+      ) : (
+        <span className="category-row-name">{category.name}</span>
+      )}
+
+      <div className="category-row-actions">
+        {editing ? (
+          <>
+            <button className="btn btn-sm btn-primary" onClick={handleSave} disabled={saving}>
+              {saving ? 'Saving…' : 'Save'}
+            </button>
+            <button
+              className="btn btn-sm"
+              onClick={() => {
+                setName(category.name);
+                setEditing(false);
+              }}
+            >
+              Cancel
+            </button>
+          </>
+        ) : (
+          <>
+            <button className="btn btn-sm" onClick={() => setEditing(true)}>
+              Rename
+            </button>
+            <button className="btn btn-sm btn-danger" onClick={() => onDelete(category)}>
+              Delete
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function Admin() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
@@ -16,12 +89,20 @@ export default function Admin() {
   const [success, setSuccess] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+  const [newCategory, setNewCategory] = useState('');
+  const [categoryError, setCategoryError] = useState('');
+  const [addingCategory, setAddingCategory] = useState(false);
+
   function loadProducts() {
     api.listProducts({ limit: 50, sort: 'newest' }).then((data) => setProducts(data.products));
   }
 
+  function loadCategories() {
+    return api.listCategories().then((data) => setCategories(data.categories));
+  }
+
   useEffect(() => {
-    api.listCategories().then((data) => setCategories(data.categories));
+    loadCategories();
     loadProducts();
   }, []);
 
@@ -62,10 +143,55 @@ export default function Admin() {
     }
   }
 
+  async function handleRenameCategory(id, name) {
+    setCategoryError('');
+    try {
+      await api.updateCategory(id, { name });
+      await loadCategories();
+      loadProducts(); // category_name on products changes too
+    } catch (err) {
+      setCategoryError(err.message);
+      throw err;
+    }
+  }
+
+  async function handleDeleteCategory(category) {
+    if (
+      !confirm(
+        `Delete "${category.name}"? Products in this category will become uncategorized, not deleted.`
+      )
+    )
+      return;
+    setCategoryError('');
+    try {
+      await api.deleteCategory(category.id);
+      await loadCategories();
+      loadProducts();
+    } catch (err) {
+      setCategoryError(err.message);
+    }
+  }
+
+  async function handleAddCategory(e) {
+    e.preventDefault();
+    if (!newCategory.trim()) return;
+    setCategoryError('');
+    setAddingCategory(true);
+    try {
+      await api.createCategory({ name: newCategory.trim() });
+      setNewCategory('');
+      await loadCategories();
+    } catch (err) {
+      setCategoryError(err.message);
+    } finally {
+      setAddingCategory(false);
+    }
+  }
+
   return (
     <div className="container admin-page">
       <h1>Stall management</h1>
-      <p className="auth-sub">Add new products or remove existing ones.</p>
+      <p className="auth-sub">Add new products, manage categories, or remove existing ones.</p>
 
       <div className="admin-grid">
         <form className="admin-form" onSubmit={handleSubmit}>
@@ -158,6 +284,33 @@ export default function Admin() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div className="admin-categories">
+        <h2>Categories</h2>
+        {categoryError && <div className="error-banner">{categoryError}</div>}
+
+        <div className="category-list">
+          {categories.map((c) => (
+            <CategoryRow
+              key={c.id}
+              category={c}
+              onRename={handleRenameCategory}
+              onDelete={handleDeleteCategory}
+            />
+          ))}
+        </div>
+
+        <form className="category-add-form" onSubmit={handleAddCategory}>
+          <input
+            placeholder="New category name"
+            value={newCategory}
+            onChange={(e) => setNewCategory(e.target.value)}
+          />
+          <button className="btn btn-sm btn-primary" type="submit" disabled={addingCategory}>
+            {addingCategory ? 'Adding…' : 'Add category'}
+          </button>
+        </form>
       </div>
     </div>
   );

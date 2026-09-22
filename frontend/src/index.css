@@ -133,6 +133,11 @@ img {
   pointer-events: none;
 }
 
+.btn-block {
+  width: 100%;
+  justify-content: center;
+}
+
 /* -------- Form fields -------- */
 .field {
   display: flex;
@@ -202,4 +207,79 @@ img {
   padding: 24px 0;
   font-size: 13px;
   margin-top: auto;
+}
+
+/* -------- Qty stepper (shared: cart + product detail) -------- */
+.qty-stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 2px solid var(--ink);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.qty-stepper button {
+  border: none;
+  background: var(--paper-raised);
+  width: 32px;
+  height: 34px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.qty-stepper button:hover:not(:disabled) {
+  background: var(--line);
+}
+
+.qty-stepper button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.qty-stepper span {
+  min-width: 32px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* -------- Toast (cart add confirmation) -------- */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 14px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: toast-in 0.2s ease;
+}
+
+@keyframes toast-in {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.toast a {
+  color: var(--amber);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.toast a:hover {
+  text-decoration: underline;
 }

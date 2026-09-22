@@ -1,0 +1,95 @@
+.orders-page {
+  padding: 40px 24px 72px;
+}
+
+.orders-page h1 {
+  font-size: 28px;
+  margin-bottom: 24px;
+}
+
+.orders-list {
+  border: 2px solid var(--ink);
+  border-radius: 4px;
+  background: var(--paper-raised);
+  overflow: hidden;
+}
+
+.order-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  color: var(--ink);
+  transition: background 0.12s ease;
+}
+
+.order-row:hover {
+  background: var(--paper);
+}
+
+.order-row:last-child {
+  border-bottom: none;
+}
+
+.order-row-main {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+}
+
+.order-row-id {
+  font-weight: 600;
+  font-size: 14px;
+  font-family: var(--font-ui);
+}
+
+.order-row-date {
+  font-size: 12px;
+  color: #8c8471;
+}
+
+.order-row-total {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--teal-dark);
+  white-space: nowrap;
+}
+
+/* -------- Status badge (shared across Orders / OrderDetail / Admin) -------- */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.status-pending {
+  background: #f6e9d2;
+  color: #8a5f13;
+}
+
+.status-processing {
+  background: #dce6f0;
+  color: #244a70;
+}
+
+.status-shipped {
+  background: #dcecea;
+  color: var(--teal-dark);
+}
+
+.status-delivered {
+  background: #e0efd9;
+  color: #2c6b2f;
+}
+
+.status-cancelled {
+  background: #f6e3da;
+  color: var(--clay);
+}

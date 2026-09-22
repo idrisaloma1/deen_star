@@ -4,7 +4,7 @@ React + Vite frontend for the DEEN-STAR SHOPPING MALL backend.
 
 ## Setup
 
-1. Make sure the backend is running on `http://localhost:5000` (`npm run dev` in `../backend`).
+1. Make sure the backend is running (`npm run dev` in `../backend`).
 2. Install dependencies:
    ```bash
    npm install
@@ -22,15 +22,16 @@ React + Vite frontend for the DEEN-STAR SHOPPING MALL backend.
 ## What's included
 
 - **Home** (`/`) — product grid with category filter pills, search, sort, and pagination
-- **Product detail** (`/product/:slug`) — full product view (cart button is a placeholder for now)
+- **Product detail** (`/product/:slug`) — full product view with quantity picker and Add to cart
+- **Cart** (`/cart`, logged-in users only) — view/update/remove items, live totals, cart count badge in the navbar
 - **Login / Register** (`/login`, `/register`) — issues a JWT and stores it in `localStorage`
 - **Admin panel** (`/admin`, admin accounts only) — add products, view all products, delete products
 
 ## What's not built yet
 
-Cart, wishlist, orders, and reviews UI — the backend routes exist but aren't wired up on the
-frontend yet. `AuthContext` (`src/context/AuthContext.jsx`) already exposes the logged-in user
-and token, so those pages can reuse the same pattern as `Admin.jsx` and `api/client.js`.
+Checkout/orders, wishlist, and reviews UI — the backend routes exist but aren't wired up on the
+frontend yet. `CartContext` (`src/context/CartContext.jsx`) is the pattern to follow for wishlist,
+and checkout will build on top of the cart once orders are wired up.
 
 ## Log in as the seeded admin
 

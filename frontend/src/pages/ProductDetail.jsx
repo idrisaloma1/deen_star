@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { api } from '../api/client.js';
+import { useAuth } from '../context/AuthContext.jsx';
+import { useCart } from '../context/CartContext.jsx';
+import WishlistButton from '../components/WishlistButton.jsx';
 import './product-detail.css';
 
 function formatNaira(amount) {
@@ -9,13 +12,21 @@ function formatNaira(amount) {
 
 export default function ProductDetail() {
   const { slug } = useParams();
+  const { user } = useAuth();
+  const { addItem } = useCart();
+  const navigate = useNavigate();
+
   const [product, setProduct] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [qty, setQty] = useState(1);
+  const [adding, setAdding] = useState(false);
+  const [addError, setAddError] = useState('');
 
   useEffect(() => {
     setLoading(true);
     setError('');
+    setQty(1);
     api
       .getProduct(slug)
       .then((data) => setProduct(data.product))
@@ -37,6 +48,22 @@ export default function ProductDetail() {
 
   const outOfStock = product.stock_quantity <= 0;
 
+  async function handleAddToCart() {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    setAddError('');
+    setAdding(true);
+    try {
+      await addItem(product, qty);
+    } catch (err) {
+      setAddError(err.message);
+    } finally {
+      setAdding(false);
+    }
+  }
+
   return (
     <div className="container product-detail">
       <Link to="/" className="back-link">
@@ -56,7 +83,10 @@ export default function ProductDetail() {
           {product.category_name && (
             <span className="stall-card-category">{product.category_name}</span>
           )}
-          <h1>{product.name}</h1>
+          <div className="product-detail-title-row">
+            <h1>{product.name}</h1>
+            <WishlistButton product={product} />
+          </div>
           <div className="product-detail-price">{formatNaira(product.price)}</div>
 
           <div className="product-detail-meta">
@@ -80,12 +110,33 @@ export default function ProductDetail() {
             )}
           </div>
 
-          <button className="btn btn-amber" disabled={outOfStock}>
-            {outOfStock ? 'Unavailable' : 'Add to cart'}
+          {addError && <div className="error-banner">{addError}</div>}
+
+          {!outOfStock && (
+            <div className="product-detail-qty">
+              <span className="product-detail-qty-label">Quantity</span>
+              <div className="qty-stepper">
+                <button onClick={() => setQty((q) => Math.max(1, q - 1))} disabled={qty <= 1}>
+                  −
+                </button>
+                <span>{qty}</span>
+                <button
+                  onClick={() => setQty((q) => Math.min(product.stock_quantity, q + 1))}
+                  disabled={qty >= product.stock_quantity}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+          )}
+
+          <button
+            className="btn btn-amber btn-block"
+            disabled={outOfStock || adding}
+            onClick={handleAddToCart}
+          >
+            {outOfStock ? 'Unavailable' : adding ? 'Adding…' : `Add ${qty > 1 ? `${qty} ` : ''}to cart`}
           </button>
-          <p className="product-detail-note">
-            Cart and checkout are coming soon — this button is a placeholder for now.
-          </p>
         </div>
       </div>
     </div>
