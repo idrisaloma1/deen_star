@@ -201,13 +201,7 @@ img {
   flex: 1;
 }
 
-.site-footer {
-  background: var(--ink);
-  color: #a79f8b;
-  padding: 24px 0;
-  font-size: 13px;
-  margin-top: auto;
-}
+/* .site-footer styling now lives in components/footer.css */
 
 /* -------- Qty stepper (shared: cart + product detail) -------- */
 .qty-stepper {
