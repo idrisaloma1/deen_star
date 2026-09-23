@@ -6,7 +6,14 @@ function formatNaira(amount) {
   return `₦${Number(amount).toLocaleString('en-NG', { maximumFractionDigits: 0 })}`;
 }
 
-const EMPTY_FORM = { name: '', description: '', price: '', stock_quantity: '', category_id: '' };
+const EMPTY_FORM = {
+  name: '',
+  description: '',
+  price: '',
+  stock_quantity: '',
+  category_id: '',
+  image_url: ''
+};
 
 function CategoryRow({ category, onRename, onDelete }) {
   const [editing, setEditing] = useState(false);
@@ -87,7 +94,8 @@ function ProductRow({ product, categories, onSave, onDelete }) {
     name: product.name,
     price: product.price,
     stock_quantity: product.stock_quantity,
-    category_id: product.category_id || ''
+    category_id: product.category_id || '',
+    image_url: product.image_url || ''
   });
   const [saving, setSaving] = useState(false);
 
@@ -96,7 +104,8 @@ function ProductRow({ product, categories, onSave, onDelete }) {
       name: product.name,
       price: product.price,
       stock_quantity: product.stock_quantity,
-      category_id: product.category_id || ''
+      category_id: product.category_id || '',
+      image_url: product.image_url || ''
     });
     setEditing(true);
   }
@@ -108,7 +117,8 @@ function ProductRow({ product, categories, onSave, onDelete }) {
         name: form.name,
         price: Number(form.price),
         stock_quantity: Number(form.stock_quantity),
-        category_id: form.category_id || null
+        category_id: form.category_id || null,
+        image_url: form.image_url.trim() || null
       });
       setEditing(false);
     } catch {
@@ -122,11 +132,24 @@ function ProductRow({ product, categories, onSave, onDelete }) {
     return (
       <tr>
         <td>
+          <div className="admin-table-thumb">
+            {form.image_url ? (
+              <img src={form.image_url} alt="" />
+            ) : (
+              <span>{form.name.charAt(0) || '?'}</span>
+            )}
+          </div>
           <input
             className="admin-table-input"
             value={form.name}
             autoFocus
             onChange={(e) => setForm({ ...form, name: e.target.value })}
+          />
+          <input
+            className="admin-table-input admin-table-input-url"
+            placeholder="Image URL (https://...)"
+            value={form.image_url}
+            onChange={(e) => setForm({ ...form, image_url: e.target.value })}
           />
         </td>
         <td>
@@ -176,7 +199,18 @@ function ProductRow({ product, categories, onSave, onDelete }) {
 
   return (
     <tr>
-      <td>{product.name}</td>
+      <td>
+        <div className="admin-table-product-cell">
+          <div className="admin-table-thumb">
+            {product.image_url ? (
+              <img src={product.image_url} alt="" />
+            ) : (
+              <span>{product.name.charAt(0)}</span>
+            )}
+          </div>
+          {product.name}
+        </div>
+      </td>
       <td>{product.category_name || '—'}</td>
       <td>{formatNaira(product.price)}</td>
       <td>{product.stock_quantity}</td>
@@ -232,7 +266,8 @@ export default function Admin() {
         description: form.description || undefined,
         price: Number(form.price),
         stock_quantity: form.stock_quantity ? Number(form.stock_quantity) : 0,
-        category_id: form.category_id || undefined
+        category_id: form.category_id || undefined,
+        image_url: form.image_url.trim() || undefined
       });
       setSuccess(`"${form.name}" added.`);
       setForm(EMPTY_FORM);
@@ -372,6 +407,35 @@ export default function Admin() {
               ))}
             </select>
           </div>
+          <div className="field">
+            <label htmlFor="image_url">Image URL</label>
+            <input
+              id="image_url"
+              name="image_url"
+              type="url"
+              placeholder="https://example.com/photo.jpg"
+              value={form.image_url}
+              onChange={handleChange}
+            />
+            <span className="field-hint">
+              Upload the photo somewhere first (e.g. your Supabase Storage bucket, or any image host),
+              then paste its direct link here.
+            </span>
+            {form.image_url && (
+              <div className="admin-form-preview">
+                <img
+                  src={form.image_url}
+                  alt="Preview"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                  onLoad={(e) => {
+                    e.currentTarget.style.display = 'block';
+                  }}
+                />
+              </div>
+            )}
+          </div>
           <button className="btn btn-primary" type="submit" disabled={submitting}>
             {submitting ? 'Adding…' : 'Add product'}
           </button>
@@ -382,7 +446,7 @@ export default function Admin() {
           <table className="admin-table">
             <thead>
               <tr>
-                <th>Name</th>
+                <th>Product</th>
                 <th>Category</th>
                 <th>Price</th>
                 <th>Stock</th>
