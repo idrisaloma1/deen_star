@@ -81,6 +81,117 @@ function CategoryRow({ category, onRename, onDelete }) {
   );
 }
 
+function ProductRow({ product, categories, onSave, onDelete }) {
+  const [editing, setEditing] = useState(false);
+  const [form, setForm] = useState({
+    name: product.name,
+    price: product.price,
+    stock_quantity: product.stock_quantity,
+    category_id: product.category_id || ''
+  });
+  const [saving, setSaving] = useState(false);
+
+  function startEdit() {
+    setForm({
+      name: product.name,
+      price: product.price,
+      stock_quantity: product.stock_quantity,
+      category_id: product.category_id || ''
+    });
+    setEditing(true);
+  }
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      await onSave(product.id, {
+        name: form.name,
+        price: Number(form.price),
+        stock_quantity: Number(form.stock_quantity),
+        category_id: form.category_id || null
+      });
+      setEditing(false);
+    } catch {
+      // error already surfaced by parent
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (editing) {
+    return (
+      <tr>
+        <td>
+          <input
+            className="admin-table-input"
+            value={form.name}
+            autoFocus
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+          />
+        </td>
+        <td>
+          <select
+            className="admin-table-input"
+            value={form.category_id}
+            onChange={(e) => setForm({ ...form, category_id: e.target.value })}
+          >
+            <option value="">No category</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </td>
+        <td>
+          <input
+            className="admin-table-input admin-table-input-num"
+            type="number"
+            min="0"
+            step="0.01"
+            value={form.price}
+            onChange={(e) => setForm({ ...form, price: e.target.value })}
+          />
+        </td>
+        <td>
+          <input
+            className="admin-table-input admin-table-input-num"
+            type="number"
+            min="0"
+            value={form.stock_quantity}
+            onChange={(e) => setForm({ ...form, stock_quantity: e.target.value })}
+          />
+        </td>
+        <td className="admin-table-actions">
+          <button className="btn btn-sm btn-primary" onClick={handleSave} disabled={saving}>
+            {saving ? 'Saving…' : 'Save'}
+          </button>
+          <button className="btn btn-sm" onClick={() => setEditing(false)} disabled={saving}>
+            Cancel
+          </button>
+        </td>
+      </tr>
+    );
+  }
+
+  return (
+    <tr>
+      <td>{product.name}</td>
+      <td>{product.category_name || '—'}</td>
+      <td>{formatNaira(product.price)}</td>
+      <td>{product.stock_quantity}</td>
+      <td className="admin-table-actions">
+        <button className="btn btn-sm" onClick={startEdit}>
+          Edit
+        </button>
+        <button className="btn btn-sm btn-danger" onClick={() => onDelete(product)}>
+          Delete
+        </button>
+      </td>
+    </tr>
+  );
+}
+
 export default function Admin() {
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
@@ -130,6 +241,17 @@ export default function Admin() {
       setError(err.message);
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function handleUpdateProduct(id, payload) {
+    setError('');
+    try {
+      await api.updateProduct(id, payload);
+      loadProducts();
+    } catch (err) {
+      setError(err.message);
+      throw err;
     }
   }
 
@@ -269,17 +391,13 @@ export default function Admin() {
             </thead>
             <tbody>
               {products.map((p) => (
-                <tr key={p.id}>
-                  <td>{p.name}</td>
-                  <td>{p.category_name || '—'}</td>
-                  <td>{formatNaira(p.price)}</td>
-                  <td>{p.stock_quantity}</td>
-                  <td>
-                    <button className="btn btn-sm btn-danger" onClick={() => handleDelete(p)}>
-                      Delete
-                    </button>
-                  </td>
-                </tr>
+                <ProductRow
+                  key={p.id}
+                  product={p}
+                  categories={categories}
+                  onSave={handleUpdateProduct}
+                  onDelete={handleDelete}
+                />
               ))}
             </tbody>
           </table>

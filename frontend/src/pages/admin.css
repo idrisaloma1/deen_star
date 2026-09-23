@@ -66,6 +66,31 @@
   border-bottom: none;
 }
 
+.admin-table-input {
+  width: 100%;
+  padding: 6px 8px;
+  border: 2px solid var(--teal);
+  border-radius: 3px;
+  font-size: 14px;
+  font-family: var(--font-ui);
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.admin-table-input:focus {
+  outline: none;
+}
+
+.admin-table-input-num {
+  max-width: 100px;
+}
+
+.admin-table-actions {
+  display: flex;
+  gap: 8px;
+  white-space: nowrap;
+}
+
 @media (max-width: 860px) {
   .admin-grid {
     grid-template-columns: 1fr;
